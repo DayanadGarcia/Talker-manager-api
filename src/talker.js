@@ -1,17 +1,20 @@
-const talker = require('../talker.json');
+const { readFile } = require('./readFile');
 
 const HTTP_OK_STATUS = 200;
 
-const getTalker = (req, res) => {
-  if (!talker) {
+const getTalker = async (req, res) => { // ---------------------função 1 -------------
+  const talks = await readFile();
+  if (!talks) {
     return res.status(HTTP_OK_STATUS).json([]);
   } 
-    return res.status(HTTP_OK_STATUS).json(talker);
+    return res.status(HTTP_OK_STATUS).json(talks);
 };
 
-const findTalker = (req, res) => {
+const findTalker = async (req, res) => { // -------------------------função 2 -----------------
+  const talks = await readFile();
+
   const { id } = req.params;
-  const talkers = talker.find((talk) => talk.id === parseInt(id, 10));
+  const talkers = talks.find((talk) => talk.id === parseInt(id, 10));
 
   if (!talkers) {
     return res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
@@ -19,7 +22,13 @@ const findTalker = (req, res) => {
   return res.status(HTTP_OK_STATUS).json(talkers);
 };
 
+const login = (req, res) => res.json({ // -----------------------função 3 ------------------
+    email: 'email@email.com',
+    password: '123456',
+  });
+
 module.exports = {
   getTalker,
   findTalker,
+  login,
 };
