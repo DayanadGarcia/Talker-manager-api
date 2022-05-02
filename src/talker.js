@@ -68,17 +68,18 @@ const login = (req, res) => {
 
 const validateToken = (req, res, next) => {
   // Esse trecho de validadação de token usando o regex foi retirado do course
-  const token = req.headers.authorization;
-  const tokenRegex = new RegExp(/^[a-zA-Z0-9]{16}$/);
+  const { authorization } = req.headers;
+  
+  if (authorization === '' || !authorization) {
+    return res.status(HTTP_UNAUTHORIZED_STATUS)
+      .json({ message: 'Token não encontrado' });
+  }
 
-  if (!tokenRegex.test(token)) {
+  if (authorization.length !== 16) {
   return res.status(HTTP_UNAUTHORIZED_STATUS)
     .json({ message: 'Token inválido' }); 
-}
-  if (token === '' || !token) {
-  return res.status(HTTP_UNAUTHORIZED_STATUS)
-    .json({ message: 'Token não encontrado' });
-}
+  }
+  
   next();
 };
 
@@ -139,7 +140,7 @@ const validateRate = (req, res, next) => {
 
 const isUndefined = (sesion) => sesion === '' || !sesion; // verifica se o campo é undefined
 
-const validateTalk = (req, res) => {
+const validateTalk = (req, res, next) => {
   const { talk } = req.body;
   if (isUndefined(talk) || isUndefined(talk.watchedAt) || isUndefined(talk.rate)) {
     return res.status(HTTP_BAD_REQUEST_STATUS)
@@ -147,6 +148,7 @@ const validateTalk = (req, res) => {
       message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios',
     });
   }
+  next();
 };
 
 module.exports = {

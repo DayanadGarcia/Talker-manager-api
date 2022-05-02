@@ -6,8 +6,9 @@ const HTTP_CREATED_STATUS = 201;
 
 const {
   getTalker, findTalker, login, validateEmail, validatePassword,
-  validateToken, validateName, validateAge, validateDate,
-  validateRate, validateTalk } = require('./talker');
+  validateName, validateAge, validateTalk,
+  validateRate, validateDate, validateToken,
+   } = require('./talker');
 
 const router = express.Router();
 
@@ -17,14 +18,12 @@ router.get('/talker/:id', findTalker);
 
 router.post('/login', validateEmail, validatePassword, login);
 
-router.post('/talker', validateToken, validateName, validateAge,
-validateDate, validateRate, validateTalk, async (req, res) => {
+router.post('/talker', validateToken, validateName, validateAge, validateTalk,
+validateRate, validateDate, async (req, res) => {
   const { name, age, talk } = req.body;
   const talks = await readFile();
-  const lastOne = talks.id.length - 1;
-  console.log(lastOne);
   const newTalker = {
-    id: Math.max(...lastOne) + 1,
+    id: talks.length + 1,
     name,
     age,
     talk: {
@@ -33,7 +32,7 @@ validateDate, validateRate, validateTalk, async (req, res) => {
     },
   };
   const newTalkersData = [...talks, newTalker];
-  fs.writeFileSync(talks, JSON.stringify(newTalkersData));
+  await fs.writeFile('./talker.json', JSON.stringify(newTalkersData));
   return res.status(HTTP_CREATED_STATUS).json(newTalker);
 });
 
