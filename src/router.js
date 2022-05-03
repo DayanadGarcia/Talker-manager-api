@@ -5,7 +5,6 @@ const { readFile } = require('./readFile');
 const HTTP_CREATED_STATUS = 201;
 const HTTP_OK_STATUS = 200;
 const HTTP_NO_CONTENT_STATUS = 204;
-const HTTP_BAD_REQUEST_STATUS = 400;
 
 const {
   getTalker, findTalker, login, validateEmail, validatePassword,
