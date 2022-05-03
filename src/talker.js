@@ -1,5 +1,7 @@
 const crypto = require('crypto');
 const moment = require('moment');
+const fs = require('fs').promises;
+
 const { readFile } = require('./readFile');
 
 const HTTP_OK_STATUS = 200;
@@ -69,7 +71,7 @@ const login = (req, res) => {
 const validateToken = (req, res, next) => {
   // Esse trecho de validadação de token usando o regex foi retirado do course
   const { authorization } = req.headers;
-  
+
   if (authorization === '' || !authorization) {
     return res.status(HTTP_UNAUTHORIZED_STATUS)
       .json({ message: 'Token não encontrado' });
@@ -138,7 +140,7 @@ const validateRate = (req, res, next) => {
   next();
 };
 
-const isUndefined = (sesion) => sesion === '' || !sesion; // verifica se o campo é undefined
+const isUndefined = (sesion) => sesion === '' || sesion === undefined; // verifica se o campo é undefined
 
 const validateTalk = (req, res, next) => {
   const { talk } = req.body;
@@ -148,6 +150,24 @@ const validateTalk = (req, res, next) => {
       message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios',
     });
   }
+  next();
+};
+
+const validateId = async (req, res, next) => {
+  const talks = await readFile();
+  const { id } = req.params; // esse id é do talker
+  const talkers = talks.filter((t) => t.id === parseInt(id, 10));
+
+  if (talkers === undefined) {
+    return res.status(HTTP_BAD_REQUEST_STATUS).json({ message: 'Not found id' });
+  }
+    const details = req.body; // pego tudo que está no body
+    details.id = Number(id);
+    talkers.push(details); // inserir o id no array que gerou do filter
+
+    const talker = JSON.stringify(talkers, null, '\t'); // transforma em json quebrando linha
+    await fs.writeFile('./talker.json', talker); // add a alteração no arq json
+
   next();
 };
 
@@ -163,4 +183,5 @@ module.exports = {
   validateDate,
   validateRate,
   validateTalk,
+  validateId,
 };
