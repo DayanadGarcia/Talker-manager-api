@@ -4,6 +4,8 @@ const { readFile } = require('./readFile');
 
 const HTTP_CREATED_STATUS = 201;
 const HTTP_OK_STATUS = 200;
+const HTTP_NO_CONTENT_STATUS = 204;
+const HTTP_BAD_REQUEST_STATUS = 400;
 
 const {
   getTalker, findTalker, login, validateEmail, validatePassword,
@@ -53,6 +55,19 @@ validateRate, validateDate, async (req, res) => {
     },
   };
    return res.status(HTTP_OK_STATUS).json(updateTalker);
+});
+
+router.delete('/talker/:id', validateToken, async (req, res) => {
+  const talks = await readFile();
+  const { id } = req.params;
+
+  const talkers = talks.filter((t) => t.id !== Number(id));
+  fs.writeFile('./talker.json', JSON.stringify(talkers));
+
+  const talkerId = Number(id);
+  talks.splice(talkerId, 1);
+
+  return res.status(HTTP_NO_CONTENT_STATUS).end();
 });
 
 module.exports = router;
