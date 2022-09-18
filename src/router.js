@@ -14,7 +14,7 @@ const {
 
 const router = express.Router();
 
-router.get('/talker', getTalker);
+router.get('/talkers', getTalker);
 
 router.get('/talker/:id', findTalker);
 

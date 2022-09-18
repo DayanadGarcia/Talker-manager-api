@@ -1,0 +1,62 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title":"Talker Manager",
+    "description": "Documentation from Talker Manager API",
+    "version": "1.0.0"
+  },
+  "basePath": "/",
+  "components": {
+    "auth": {
+
+    }
+  },
+  "paths": {
+    "/talkers": {
+      "get": {
+        "responses": {
+
+        }
+      }
+    },
+    "/talker": {
+      "post": {
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"              
+                  },
+                  "age": {
+                    "type": "number"
+                  },
+                  "talk": {
+                    "type": "object",
+                    "properties": {
+                      "watchedAt": {
+                        "type": "string",
+                        "format": "date"
+                      },
+                      "rate": {
+                        "type": "number"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+
+        },
+        "responses": {
+          "200":{
+            "description": "Talker adicionado com sucesso!"
+          }
+        }
+      }
+    }
+  }
+}
