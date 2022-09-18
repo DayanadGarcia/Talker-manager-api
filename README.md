@@ -1,8 +1,11 @@
 # Boas vindas ao repositório do Talker Manager!
 
+- Quarto projeto do módulo de Back-end na Trybe - Turma 17
+- Maio/2022
+- Projeto realizado individualmente
+- CRUD API - Nodejs
 
 ## Objetivos do projeto / Desenvolvimento:
-
 
 
 
