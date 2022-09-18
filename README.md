@@ -44,4 +44,6 @@
 
 ## Documentação:
 - Para acessar a documentação dessa API:
-  - 
+  - clone o projeto
+  - rode o script: npm run dev
+  - acesse: http://localhost:3131/api-docs/
